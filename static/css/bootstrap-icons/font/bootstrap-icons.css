@@ -1,0 +1,49 @@
+/*!
+ * Bootstrap Icons v1.11.3 (https://icons.getbootstrap.com/)
+ * Copyright 2019-2024 The Bootstrap Authors
+ * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
+ */
+
+@font-face {
+  font-display: block;
+  font-family: "bootstrap-icons";
+  src: url("./fonts/bootstrap-icons.woff2?dd67030699838ea613ee6dbda90effa6") format("woff2"),
+url("./fonts/bootstrap-icons.woff?dd67030699838ea613ee6dbda90effa6") format("woff");
+}
+
+.bi::before,
+[class^="bi-"]::before,
+[class*=" bi-"]::before {
+  display: inline-block;
+  font-family: bootstrap-icons !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: -.125em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.bi-check2::before { content: "\f272"; }
+
+.bi-x-lg::before { content: "\f659"; }
+
+.bi-exclamation-diamond::before { content: "\f335"; }
+
+.bi-check2-square::before { content: "\f271"; }
+.bi-dash-square::before { content: "\F2E9"; }
+.bi-square::before { content: "\F584"; }
+.bi-slash-square::before { content: "\F569"; }
+.bi-question-square::before { content: "\F50B"; }
+.bi-plus-square::before { content: "\F4FD"; }
+.bi-exclamation-square::before { content: "\F339"; }
+.bi-diamond::before { content: "\F2F1"; }
+.bi-x-square::before { content: "\F629"; }
+
+.bi-box-arrow-down::before { content: "\F1B9"; }
+.bi-download::before { content: "\F30A"; }
+
+
