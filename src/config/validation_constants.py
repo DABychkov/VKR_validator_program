@@ -16,6 +16,8 @@ SECTION_REFERENCES = "СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИК
 SECTION_EXECUTOR_LIST = "СПИСОК ИСПОЛНИТЕЛЕЙ"
 SECTION_EXECUTOR_LIST_TYPO = "СПИСОК ИСПОЛЬНИТЕЛЕЙ"
 SECTION_APPENDIX = "ПРИЛОЖЕНИЕ"
+SECTION_TITLE_PAGE = "ТИТУЛЬНЫЙ_ЛИСТ"
+SECTION_MAIN = "ОСНОВНАЯ_ЧАСТЬ"
 
 # Наборы ключевых слов для поиска секций
 CONTENTS_SECTION_KEYWORDS = (SECTION_CONTENTS,)
