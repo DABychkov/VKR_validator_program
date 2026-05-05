@@ -11,6 +11,7 @@ from ...config.regex_patterns import RE_MAIN_SECTION_START_PATTERNS
 from ...config.validation_constants import (
     PARSER_SECTION_KEYWORDS,
     SECTION_APPENDIX,
+    SECTION_INTRODUCTION,
     SECTION_MAIN,
     SECTION_TITLE_PAGE,
 )
@@ -92,7 +93,7 @@ def _resolve_section_hint(
         if normalized == keyword:
             return keyword
 
-    if current_section == "ВВЕДЕНИЕ":
+    if current_section == SECTION_INTRODUCTION:
         if _is_heading_level_one(style_name):
             return SECTION_MAIN
         if any(pattern.match(raw_text) for pattern in RE_MAIN_SECTION_START_PATTERNS):

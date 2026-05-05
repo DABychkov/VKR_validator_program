@@ -5,7 +5,9 @@ from __future__ import annotations
 from pathlib import Path
 
 from .config.validation_constants import DEFAULT_TEST_DOCX_PATH
+from .config.open_users_utils import CHECKS_CATALOG
 from .config.rules_catalog import RULES_CATALOG_BY_VALIDATOR
+from .config.sections_catalog import SECTIONS_CATALOG
 from .models.rule_result import RuleResult
 from .services.document_parser import DocumentParser
 from .services.rich_parser import RichParser
@@ -56,6 +58,18 @@ class ReportAndListHandler:
         if self.encoding:
             print(f"getList: получено правил={len(flat_rules)}")
         return self.converter_result(flat_rules)
+
+    def getSections(self) -> dict[str, list[dict[str, str]]]:
+        """Возвращает список секций документа для фронта."""
+        if self.encoding:
+            print(f"getSections: получено секций={len(SECTIONS_CATALOG)}")
+        return {"list": list(SECTIONS_CATALOG)}
+
+    def getFunctions(self) -> dict[str, list[dict[str, object]]]:
+        """Возвращает список доступных пользовательских проверок."""
+        if self.encoding:
+            print(f"getFunctions: получено функций={len(CHECKS_CATALOG)}")
+        return {"list": list(CHECKS_CATALOG)}
 
     def converter_result(self, rules: list[RuleResult]) -> dict[str, list[dict[str, object]]]:
         """Конвертирует list[RuleResult] в формат для фронта."""

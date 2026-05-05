@@ -16,8 +16,8 @@ SECTION_REFERENCES = "СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИК
 SECTION_EXECUTOR_LIST = "СПИСОК ИСПОЛНИТЕЛЕЙ"
 SECTION_EXECUTOR_LIST_TYPO = "СПИСОК ИСПОЛЬНИТЕЛЕЙ"
 SECTION_APPENDIX = "ПРИЛОЖЕНИЕ"
-SECTION_TITLE_PAGE = "ТИТУЛЬНЫЙ_ЛИСТ"
-SECTION_MAIN = "ОСНОВНАЯ_ЧАСТЬ"
+SECTION_INTRODUCTION = "ВВЕДЕНИЕ"
+SECTION_CONCLUSION = "ЗАКЛЮЧЕНИЕ"
 
 # Наборы ключевых слов для поиска секций
 CONTENTS_SECTION_KEYWORDS = (SECTION_CONTENTS,)
@@ -40,8 +40,8 @@ PARSER_SECTION_KEYWORDS = [
     SECTION_CONTENTS,
     SECTION_TERMS,
     SECTION_ABBREVIATIONS,
-    "ВВЕДЕНИЕ",
-    "ЗАКЛЮЧЕНИЕ",
+    SECTION_INTRODUCTION,
+    SECTION_CONCLUSION,
     SECTION_REFERENCES,
     SECTION_APPENDIX,
     SECTION_COMBINED_DEFINITIONS,
