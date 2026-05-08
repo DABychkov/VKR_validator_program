@@ -48,7 +48,7 @@
                 <div class="row">
                     <div class="col-7">
                         <p class="h1 text-center text-white">
-                            <strong> Проверка документов на требования  ГОСТ </strong>
+                            <strong> Проверка документов на требования ГОСТ </strong>
                         </p>
                     </div>
                 </div>
@@ -56,8 +56,8 @@
                 <div class="row py-4">
                     <div class="col-7">
                         <p class="h5 text-center text-white bsm-h5">
-                            Данная система атоматичски проверит Ваши документы на требования стандарта ГОСТ. 
-                            Проанализирует загруженный документ, выявит отклонения от требований стандарта ГОСТ, 
+                            Данная система атоматичски проверит Ваши документы на требования стандарта ГОСТ.
+                            Проанализирует загруженный документ, выявит отклонения от требований стандарта ГОСТ,
                             сформирует подробный отчет и поможет сэкономить Ваше время.
 
                         </p>
@@ -252,7 +252,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="row justify-content-center py-4">
+                <div class="row justify-content-center pt-4">
                     <div class="col-12">
 
                         <div class="accordion" id="accordion2ListGOST2017">
@@ -271,9 +271,22 @@
                                         </ol>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
 
+                    </div>
+                </div>
+                <div class="row px-4 pb-4">
+                    <div class="col-12">
+                        <!-- Кнопка-триггер модального окна -->
+                        <!-- <button id="btn-add-rule" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Добавить новое правило
+                        </button> -->
+                        <button id="btn-add-rule" type="button" class="btn btn-outline-secondary">
+                            Добавить новое правило
+                        </button>
                     </div>
                 </div>
 
@@ -439,6 +452,80 @@
                     </div>
                 </div>
             </div>
+        </section>
+
+        <section class="block-modal">
+
+            <form method="POST" id="modalAddForm" enctype="multipart/form-data">
+
+                <!-- Модальное окно -->
+                <div class="modal fade" id="addRuleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Пользовательское правило</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Закрыть"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="rule_id" >
+                                <input type="hidden" name="action" value="create" >
+                                <div class="row justify-content-center py-2">
+                                    <div class="col-sm-12">
+                                        <label class="form-label">Выберите где в документе проверять</label>
+                                        <select id="select-section" class="form-select form-select mb-3"
+                                            name="select_section">
+                                            <option disabled selected value="">Выберите секцию</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center py-2">
+                                    <div class="col-sm-12">
+                                        <label>Выберите функцию для проверять</label>
+                                        <select id="select-function" class="form-select form-select mb-3"
+                                            name="select_function">
+                                            <option disabled selected value="">Выберите функцию</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="varx">
+
+                                </div>
+
+                                <div class="row justify-content-center py-2">
+                                    <div class="col-sm-12">
+                                        <div class="input-group">
+                                            <span class="input-group-text">Описание правила проверки</span>
+                                            <textarea class="form-control" name="rule_desc"></textarea>
+                                        </div>
+                                        <div class="form-text">Опишите правило, как оно будет выглядеть в списке правил.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center py-2">
+                                    <div class="col-sm-12">
+                                        <div class="input-group">
+                                            <span class="input-group-text">ГОСТ</span>
+                                            <textarea class="form-control" name="gost_ref"></textarea>
+                                        </div>
+                                        <div class="form-text">Напишите название и пункт ГОСТ, если такой существует.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                <button id="submitBtnModal" type="submit" class="btn btn-primary">Сохранить </button>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </section>
 
     </main>

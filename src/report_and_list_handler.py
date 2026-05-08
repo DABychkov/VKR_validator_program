@@ -16,6 +16,7 @@ from .validators.abbreviations_validator import AbbreviationsValidator
 from .validators.abstract_validator import AbstractValidator
 from .validators.appendices_validator import AppendicesValidator
 from .validators.contents_validator import ContentsValidator
+from .validators.custom_rules_validator import CustomRulesValidator, build_rules_path
 from .validators.executor_list_validator import ExecutorListValidator
 from .validators.general_validators import (
     FigureValidator,
@@ -89,7 +90,7 @@ class ReportAndListHandler:
             ]
         }
 
-    def validate(self, file_path: str) -> dict[str, list[dict[str, object]]]:
+    def validate(self, file_path: str, *, user_id: str | None = None) -> dict[str, list[dict[str, object]]]:
         """Проверяет документ и возвращает результат в формате {'list': [...]} для фронта."""
         if not file_path.strip():
             if self.encoding:
@@ -118,7 +119,7 @@ class ReportAndListHandler:
         rich_doc = RichParser().parse(str(path))
         doc.rich_document = rich_doc
 
-        service = self._build_validation_service()
+        service = self._build_validation_service(user_id=user_id)
         flat_results = service.validate_rules(doc)
 
         if self.encoding:
@@ -127,7 +128,7 @@ class ReportAndListHandler:
 
         return self.converter_result(flat_results)
 
-    def _build_validation_service(self) -> ValidationService:
+    def _build_validation_service(self, *, user_id: str | None = None) -> ValidationService:
         """Собирает ValidationService с тем же составом валидаторов, что и в main."""
         service = ValidationService()
         service.register(TitlePageValidator())
@@ -145,14 +146,34 @@ class ReportAndListHandler:
         service.register(LinksValidator())
         service.register(NotesValidator())
         service.register(FootnotesValidator())
+        service.register(CustomRulesValidator(user_id=user_id))
         return service
+
+    def deleteUserRules(self, user_id: str) -> dict[str, object]:
+        """Удаляет файл пользовательских правил по user_id."""
+        path = build_rules_path(user_id)
+        if path is None:
+            return {"deleted": False, "path": ""}
+        if not path.exists():
+            return {"deleted": False, "path": str(path)}
+        try:
+            path.unlink()
+        except OSError:
+            return {"deleted": False, "path": str(path)}
+        return {"deleted": True, "path": str(path)}
 
 
 if __name__ == "__main__":
     handler = ReportAndListHandler(encoding=True)
 
     rules = handler.getList()
-    print(rules)
+    #print(rules)
 
     result = handler.validate(DEFAULT_TEST_DOCX_PATH)
-    print(result)
+    #print(result)
+
+    sections = handler.getSections()
+    print(sections)
+
+    functions = handler.getFunctions()
+    print(functions)

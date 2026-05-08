@@ -18,6 +18,8 @@ SECTION_EXECUTOR_LIST_TYPO = "СПИСОК ИСПОЛЬНИТЕЛЕЙ"
 SECTION_APPENDIX = "ПРИЛОЖЕНИЕ"
 SECTION_INTRODUCTION = "ВВЕДЕНИЕ"
 SECTION_CONCLUSION = "ЗАКЛЮЧЕНИЕ"
+SECTION_MAIN = "ОСНОВНАЯ_ЧАСТЬ"
+SECTION_TITLE_PAGE = "ТИТУЛЬНЫЙ_ЛИСТ"
 
 # Наборы ключевых слов для поиска секций
 CONTENTS_SECTION_KEYWORDS = (SECTION_CONTENTS,)

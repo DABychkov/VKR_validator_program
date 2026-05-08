@@ -46,4 +46,7 @@ url("./fonts/bootstrap-icons.woff?dd67030699838ea613ee6dbda90effa6") format("wof
 .bi-box-arrow-down::before { content: "\F1B9"; }
 .bi-download::before { content: "\F30A"; }
 
+.bi-trash3::before { content: "F78B"; }
+.bi-pencil::before { content: "F4CB"; }
+
 

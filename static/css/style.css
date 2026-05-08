@@ -112,10 +112,7 @@ body {
 .accordion-button:not(.collapsed){
 	color: black!important;
 }
-.accordion-body {
-	/*--border-bottom-color: #0000df!important;-*/
-	/*border-bottom: 2px solid var(--bs-border-color-translucent);*/
-}
+
 .accordion-button:focus {
     outline: none; /* Optional: некоторые браузеры используют outline */
     box-shadow: none; /* Critical: удаляет синий свет Bootstrap */
@@ -194,3 +191,21 @@ button.pretty {
 	width: 25%;
 }
 */
+
+
+
+#addRuleModal span {
+  background-color: inherit;
+}
+
+#addRuleModal input, #addRuleModal textarea, #addRuleModal select {
+  background-color: rgba(255,255,255,0.5);
+}
+
+.user-rules-list button{
+    margin-left: 10px;
+}
+
+.btn-edit-rule, .btn-del-rule {
+    border: none;
+}
