@@ -125,21 +125,6 @@ def handle_check():
     except Exception as e:
         return jsonify({'statusCode': 500, 'message': f'Внутренняя ошибка: {str(e)}', 'data': {}})
 
-def set_session():
-    """Записывает данные в сессию."""
-    # Можно принимать данные из запроса (GET или POST)
-    # Для примера возьмём из аргументов запроса
-    key = request.args.get('key', 'test_key')
-    value = request.args.get('value', 'test_value')
-    session[key] = value
-    return jsonify({'message': f'Сессия установлена: {key}={value}'})
-
-def get_session():
-    """Читает данные из сессии."""
-    key = request.args.get('key', 'test_key')
-    value = session.get(key, 'не найдено')
-    return jsonify({key: value})
-
 """Возвращает переменные вопроса."""
 def get_vars_options():
     """Возвращает переменные вопроса."""

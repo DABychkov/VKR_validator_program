@@ -2,54 +2,48 @@
 
 CHECKS_CATALOG: list[dict[str, object]] = [
     {
-        "id": "check_first_line_indent_share",
+        "id_func": "check_first_line_indent_share",
         "name": "Абзацный отступ",
-        "params": [
-            {"name": "expected_mm", "label": "Целевой отступ (мм)", "type": "float"},
-            {"name": "min_valid_share", "label": "Минимальная доля", "type": "float"},
+        "agr": [
+            {"name": "expected_mm", "type": "float", "desc": "Целевой отступ",'um':'мм'},
+            {"name": "min_valid_share", "type": "float", "desc": "Минимальная доля",'um':'(0-1)'},
         ],
-        "returns": "share",
     },
     {
-        "id": "check_line_spacing_share",
+        "id_func": "check_line_spacing_share",
         "name": "Межстрочный интервал",
-        "params": [
-            {"name": "allowed_values", "label": "Допустимые значения", "type": "float_list"},
-            {"name": "min_valid_share", "label": "Минимальная доля", "type": "float"},
+        "agr": [
+            {"name": "allowed_values", "type": "float_list", "desc": "Допустимые значения",'um':'мм'},
+            {"name": "min_valid_share", "type": "float", "desc": "Минимальная доля",'um':'(0-1)'},
         ],
-        "returns": "share",
     },
     {
-        "id": "check_min_font_size_share",
+        "id_func": "check_min_font_size_share",
         "name": "Минимальный размер шрифта",
-        "params": [
-            {"name": "min_size_pt", "label": "Минимальный размер (пт)", "type": "float"},
-            {"name": "max_below_threshold_share", "label": "Макс. доля ниже порога", "type": "float"},
+        "agr": [
+            {"name": "min_size_pt","type": "float", "desc": "Минимальный размер",'um':'pt'},
+            {"name": "max_below_threshold_share","type": "float", "desc": "Макс. доля ниже порога",'um':'(0-1)'},
         ],
-        "returns": "share",
     },
     {
-        "id": "check_italic_share",
+        "id_func": "check_italic_share",
         "name": "Доля курсива",
-        "params": [
-            {"name": "max_italic_share", "label": "Макс. доля курсива", "type": "float"},
+        "agr": [
+            {"name": "max_italic_share","type": "float", "desc": "Макс. доля курсива",'um':'(0-1)'},
         ],
-        "returns": "share",
     },
     {
-        "id": "check_non_black_share",
+        "id_func": "check_non_black_share",
         "name": "Доля не-черного цвета",
-        "params": [
-            {"name": "max_non_black_share", "label": "Макс. доля не-черного", "type": "float"},
+        "agr": [
+            {"name": "max_non_black_share","type": "float", "desc": "Макс. доля не-черного",'um':'(0-1)'},
         ],
-        "returns": "share",
     },
     {
-        "id": "check_target_font_share",
+        "id_func": "check_target_font_share",
         "name": "Доля целевого шрифта",
-        "params": [
-            {"name": "min_target_share", "label": "Минимальная доля", "type": "float"},
+        "agr": [
+            {"name": "min_target_share","type": "float", "desc": "Минимальная доля",'um':'(0-1)'},
         ],
-        "returns": "share",
     },
 ]

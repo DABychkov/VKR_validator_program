@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import List, Dict, Any
 
 # from app.validators import get_section_for_user_rules, get_function_for_user_rules
-
+from src.report_and_list_handler import ReportAndListHandler
 
 # Разрешённые расширения для текстовых файлов
 ALLOWED_EXTENSIONS = {'docx', 'doc', 'txt'}
@@ -208,30 +208,31 @@ def get_all_user_rules_from_session():
 '''Ф-я Возвращает все переменные необходимые для создания своих правил'''
 def get_all_vars_for_rule():
     '''Ф-я Возвращает все переменные необходимые для создания своих правил'''
-    # nd={}
-    # nd['section']=get_section_for_user_rules()
-    # nd['func_check']=get_function_for_user_rules()
+    handler = ReportAndListHandler(encoding=False)
+    nd = {}
+    nd['section'] = handler.getSections()['section']
+    nd['func_check'] = handler.getFunctions()['func_check']
 
     # ------------------
-    nd={
-        'section':[
-            {'id_section':'titulnik', 'name':'Титульник'},
-            {'id_section':'list_link', 'name':'Список ссылок'},
-            {'id_section':'referat', 'name':'Реферат'}
-                    ],
-        'func_check':[
-            {'id_func':'font', 'name':'шрифт',  'agr':[
-                {'name':'a', 'type':'str', 'desc':'введите название шрифта','um':''}
-            ]},
-            {'id_func':'font_size', 'name':'размер шрифта', 'agr':[
-                {'name':'a', 'type':'float', 'desc':'введите размер шрифта min','um':'pt'},
-                {'name':'b', 'type':'float', 'desc':'введите размер шрифта max','um':'pt'}
-            ]},
-            {'id_func':'interval_font', 'name':'интервал шрифта', 'agr':[
-                {'name':'a', 'type':'float', 'desc':'введите интервал шрифта','um':'%'}
-            ]}
-        ]
-    }
+    # nd={
+    #     'section':[
+    #         {'id_section':'titulnik', 'name':'Титульник'},
+    #         {'id_section':'list_link', 'name':'Список ссылок'},
+    #         {'id_section':'referat', 'name':'Реферат'}
+    #                 ],
+    #     'func_check':[
+    #         {'id_func':'font', 'name':'шрифт',  'agr':[
+    #             {'name':'a', 'type':'str', 'desc':'введите название шрифта','um':''}
+    #         ]},
+    #         {'id_func':'font_size', 'name':'размер шрифта', 'agr':[
+    #             {'name':'a', 'type':'float', 'desc':'введите размер шрифта min','um':'pt'},
+    #             {'name':'b', 'type':'float', 'desc':'введите размер шрифта max','um':'pt'}
+    #         ]},
+    #         {'id_func':'interval_font', 'name':'интервал шрифта', 'agr':[
+    #             {'name':'a', 'type':'float', 'desc':'введите интервал шрифта','um':'%'}
+    #         ]}
+    #     ]
+    # }
     # ----------------------
     
     return nd

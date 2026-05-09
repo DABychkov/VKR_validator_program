@@ -2,44 +2,14 @@
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
 from typing import Any
 
+from ..config.sections_catalog import SECTIONS_CATALOG
 from ..models.document_structure import DocumentStructure
 from ..models.rule_result import RuleResult
 from ..models.validation_result import Severity, ValidationResult
 from ..services.custom_rules_adapter import run_custom_check
 from .base_validator import BaseValidator
-
-
-DEFAULT_RULES_DIR = Path(__file__).resolve().parents[1] / "user_rules"
-
-
-def build_rules_path(user_id: str | None) -> Path | None:
-    if not user_id:
-        return None
-    safe_user_id = "".join(ch for ch in str(user_id) if ch.isalnum() or ch in {"-", "_"})
-    if not safe_user_id:
-        return None
-    return DEFAULT_RULES_DIR / f"user_{safe_user_id}.json"
-
-
-def _load_rules(path: Path | None) -> list[dict[str, Any]]:
-    if path is None or not path.exists():
-        return []
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return []
-
-    if isinstance(payload, list):
-        return [item for item in payload if isinstance(item, dict)]
-    if isinstance(payload, dict):
-        items = payload.get("rules", [])
-        if isinstance(items, list):
-            return [item for item in items if isinstance(item, dict)]
-    return []
 
 
 def _resolve_status(result: dict[str, object]) -> str:
@@ -54,11 +24,92 @@ def _resolve_status(result: dict[str, object]) -> str:
     return "SKIP"
 
 
-class CustomRulesValidator(BaseValidator):
-    """Применяет пользовательские правила из JSON."""
+def _normalize_text(value: str | None) -> str:
+    if not value:
+        return ""
+    return " ".join(value.strip().lower().split())
 
-    def __init__(self, rules_path: Path | None = None, user_id: str | None = None) -> None:
-        self.rules_path = rules_path if rules_path is not None else build_rules_path(user_id)
+
+def _build_section_name_map() -> dict[str, str]:
+    return {
+        _normalize_text(item.get("name")): str(item.get("id_section", ""))
+        for item in SECTIONS_CATALOG
+        if isinstance(item, dict)
+    }
+
+
+def _coerce_value(raw: Any, value_type: str | None) -> Any:
+    if raw is None:
+        return None
+    if value_type == "float_list":
+        if isinstance(raw, (list, tuple)):
+            items = raw
+        else:
+            text = str(raw)
+            for sep in [";", " "]:
+                text = text.replace(sep, ",")
+            items = [item for item in (part.strip() for part in text.split(",")) if item]
+        values: list[float] = []
+        for item in items:
+            try:
+                values.append(float(str(item).replace(",", ".")))
+            except ValueError:
+                return None
+        return values
+    if value_type == "float":
+        try:
+            return float(str(raw).replace(",", "."))
+        except ValueError:
+            return None
+    if value_type == "int":
+        try:
+            return int(str(raw))
+        except ValueError:
+            return None
+    if value_type == "bool":
+        return str(raw).strip().lower() in {"1", "true", "да", "yes"}
+    return str(raw).strip()
+
+
+def _build_params(args_list: list[dict[str, Any]] | None) -> dict[str, object]:
+    if not args_list:
+        return {}
+    params: dict[str, object] = {}
+    for arg in args_list:
+        if not isinstance(arg, dict):
+            continue
+        name = str(arg.get("name", "") or "").strip()
+        if not name:
+            continue
+        value_type = str(arg.get("type", "") or "").strip().lower() or None
+        coerced = _coerce_value(arg.get("val"), value_type)
+        if coerced is None:
+            continue
+        params[name] = coerced
+    return params
+
+
+class CustomRulesValidator(BaseValidator):
+    """Применяет пользовательские правила из сессии."""
+
+    def __init__(self) -> None:
+        self.section_name_map = _build_section_name_map()
+
+    def _load_rules(self) -> list[dict[str, Any]]:
+        try:
+            from app.utils import get_all_user_rules_from_session
+        except Exception:
+            return []
+
+        try:
+            rules = get_all_user_rules_from_session()
+        except Exception:
+            return []
+
+        if not isinstance(rules, list):
+            return []
+
+        return [rule for rule in rules if isinstance(rule, dict)]
 
     def validate(self, document: DocumentStructure) -> ValidationResult:
         result = ValidationResult(validator_name="CustomRulesValidator")
@@ -66,7 +117,7 @@ class CustomRulesValidator(BaseValidator):
         if rich_doc is None:
             return result
 
-        rules = _load_rules(self.rules_path)
+        rules = self._load_rules()
         if not rules:
             return result
 
@@ -77,17 +128,20 @@ class CustomRulesValidator(BaseValidator):
             section = str(rule.get("section", "") or "").strip()
             description = str(rule.get("description", "") or "").strip()
             severity = str(rule.get("severity", "RECOMMENDATION") or "RECOMMENDATION").strip().upper()
-            function_id = str(rule.get("function_id", "") or "").strip()
-            params = rule.get("params") if isinstance(rule.get("params"), dict) else None
+            function_id = str(rule.get("func", "") or "").strip()
+            args_list = rule.get("args") if isinstance(rule.get("args"), list) else None
+            params = _build_params(args_list)
+            gost_ref = str(rule.get("gost_ref", "") or "").strip() or "-"
 
             if not rule_id or not function_id:
                 continue
 
-            if section:
+            section_key = self.section_name_map.get(_normalize_text(section), section)
+            if section_key:
                 scoped_paragraphs = [
                     paragraph
                     for paragraph in paragraph_features
-                    if str(getattr(paragraph, "section_hint", "") or "").strip() == section
+                    if str(getattr(paragraph, "section_hint", "") or "").strip() == section_key
                 ]
             else:
                 scoped_paragraphs = paragraph_features
@@ -107,7 +161,7 @@ class CustomRulesValidator(BaseValidator):
                 severity=severity,
                 status=status,
                 message=message,
-                gost_ref="-",
+                gost_ref=gost_ref,
                 implemented=True,
             )
             result.rule_results.append(rule_result)

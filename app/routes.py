@@ -1,6 +1,6 @@
 # from app.controllers import home, handle_check, get_list_rules, download_report, set_session, get_session, get_vars_options, add_rulle, get_user_rulles, del_user_rulle 
-from app.controllers import home, handle_check, get_list_rules, download_report, set_session
-from app.controllers import get_session, get_vars_options, add_rulle, get_user_rulles, del_user_rulle 
+from app.controllers import home, handle_check, get_list_rules, download_report
+from app.controllers import get_vars_options, add_rulle, get_user_rulles, del_user_rulle 
 from app.controllers import get_one_user_rulle, update_user_rulle 
 
 def register_routes(app):
@@ -14,8 +14,3 @@ def register_routes(app):
     app.add_url_rule('/del-user-rulle', view_func=del_user_rulle, methods=['POST'])
     app.add_url_rule('/update-user-rulle', view_func=update_user_rulle, methods=['POST'])
     app.add_url_rule('/get-one-user-rulle', view_func=get_one_user_rulle, methods=['POST'])
-
-
-    # маршруты для работы с сессией
-    app.add_url_rule('/set_session', view_func=set_session, methods=['GET'])
-    app.add_url_rule('/get_session', view_func=get_session, methods=['GET'])
