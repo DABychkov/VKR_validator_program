@@ -473,7 +473,7 @@
                                 <input type="hidden" name="action" value="create" >
                                 <div class="row justify-content-center py-2">
                                     <div class="col-sm-12">
-                                        <label class="form-label">Выберите где в документе проверять</label>
+                                        <label class="form-label">Выберите где проверять в документе </label>
                                         <select id="select-section" class="form-select form-select mb-3"
                                             name="select_section">
                                             <option disabled selected value="">Выберите секцию</option>
@@ -483,7 +483,7 @@
                                 </div>
                                 <div class="row justify-content-center py-2">
                                     <div class="col-sm-12">
-                                        <label>Выберите функцию для проверять</label>
+                                        <label class="form-label">Выберите функцию для проверки</label>
                                         <select id="select-function" class="form-select form-select mb-3"
                                             name="select_function">
                                             <option disabled selected value="">Выберите функцию</option>
@@ -506,6 +506,20 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="row justify-content-center py-2">
+                                    <div class="col-sm-12">
+                                        <label class="form-label">Выберите степень важности правила</label>
+                                        <select id="select-importance" class="form-select form-select mb-3"
+                                            name="select_importance">
+                                            <option disabled selected value="">Выберите важность</option>
+                                            <option  value="CRITICAL">Критическая</option>
+                                            <option  value="RECOMMENDATION">Рекомендация</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div class="row justify-content-center py-2">
                                     <div class="col-sm-12">
                                         <div class="input-group">

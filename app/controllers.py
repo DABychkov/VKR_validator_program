@@ -15,7 +15,7 @@ from app.utils import send_report_file, is_report_valid, clean_old_reports, dele
 from app.utils import get_all_vars_for_rule, get_args_by_id_func, find_in_vars, find_rule_inSession_by_id
 from app.utils import update_by_id
 import uuid
-from app.validators import validate_str,validate_int, validate_float
+from app.validators import validate_str, validate_rule_arg
 
 """Контроллер главной страницы."""
 def home():
@@ -144,12 +144,13 @@ def add_rulle():
 
     # формируем новое правило проверки
     new_rule={}
-    new_rule['rule_id']=uuid.uuid4()
+    # new_rule['rule_id']=uuid.uuid4()
     new_rule['rule_id']=str(uuid.uuid4())
 
     # Данные из формы
     select_section = request.form.get('select_section')         
-    select_function = request.form.get('select_function')            
+    select_function = request.form.get('select_function')  
+    select_importance = request.form.get('select_importance')
     rule_desc = request.form.get('rule_desc')            
     gost_ref = request.form.get('gost_ref')            
 
@@ -177,6 +178,10 @@ def add_rulle():
         return jsonify({'statusCode': 400, 'message': name_err })
     # print('select_function',select_function, new_rule['func'])
 
+    is_valid, new_rule['severity'], name_err = validate_str(select_importance)
+    if not is_valid:
+        return jsonify({'statusCode': 400, 'message': name_err })
+
     # По функции получаем аргументы
     args = get_args_by_id_func('func_check', select_function)
     # args = get_args_by_id_func(nd_rule['func_check'], select_function)
@@ -188,15 +193,7 @@ def add_rulle():
         arg_val=request.form.get(arg['name'])
         # args[i]['val']=arg_val
         # По типу аргумента делаем валидацию
-        choice = arg['type']
-        if choice == "str":
-            is_valid, cleaned_val, name_err = validate_str(arg_val)
-        elif choice == "float":
-            is_valid, cleaned_val, name_err = validate_float(arg_val)
-        elif choice == "int":
-            is_valid, cleaned_val, name_err = validate_int(arg_val)
-        else:
-            print("Invalid state abbreviation entered in valid")
+        is_valid, cleaned_val, name_err = validate_rule_arg(arg['name'], arg_val)
 
         # если не прошли проверку
         if not is_valid:
@@ -303,7 +300,8 @@ def update_user_rulle():
 
     # Данные из формы
     select_section = request.form.get('select_section')         
-    select_function = request.form.get('select_function')            
+    select_function = request.form.get('select_function')  
+    select_importance = request.form.get('select_importance')          
     rule_desc = request.form.get('rule_desc')            
     gost_ref = request.form.get('gost_ref')            
 
@@ -331,6 +329,10 @@ def update_user_rulle():
         return jsonify({'statusCode': 400, 'message': name_err })
     # print('select_function',select_function, new_rule['func'])
 
+    is_valid, new_rule['severity'], name_err = validate_str(select_importance)
+    if not is_valid:
+        return jsonify({'statusCode': 400, 'message': name_err })
+    
     # По функции получаем аргументы
     args = get_args_by_id_func('func_check', select_function)
 
@@ -341,15 +343,7 @@ def update_user_rulle():
         arg_val=request.form.get(arg['name'])
         # args[i]['val']=arg_val
         # По типу аргумента делаем валидацию
-        choice = arg['type']
-        if choice == "str":
-            is_valid, cleaned_val, name_err = validate_str(arg_val)
-        elif choice == "float":
-            is_valid, cleaned_val, name_err = validate_float(arg_val)
-        elif choice == "int":
-            is_valid, cleaned_val, name_err = validate_int(arg_val)
-        else:
-            print("Invalid state abbreviation entered in valid")
+        is_valid, cleaned_val, name_err = validate_rule_arg(arg['name'], arg_val)
 
         # если не прошли проверку
         if not is_valid:

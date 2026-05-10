@@ -38,54 +38,81 @@ def _build_section_name_map() -> dict[str, str]:
     }
 
 
-def _coerce_value(raw: Any, value_type: str | None) -> Any:
-    if raw is None:
+def _parse_float(value: Any) -> float | None:
+    if value is None:
         return None
-    if value_type == "float_list":
-        if isinstance(raw, (list, tuple)):
-            items = raw
-        else:
-            text = str(raw)
-            for sep in [";", " "]:
-                text = text.replace(sep, ",")
-            items = [item for item in (part.strip() for part in text.split(",")) if item]
-        values: list[float] = []
-        for item in items:
-            try:
-                values.append(float(str(item).replace(",", ".")))
-            except ValueError:
-                return None
-        return values
-    if value_type == "float":
-        try:
-            return float(str(raw).replace(",", "."))
-        except ValueError:
+    try:
+        return float(str(value).replace(",", "."))
+    except ValueError:
+        return None
+
+
+def _parse_float_list(value: Any) -> tuple[float, ...] | None:
+    if value is None:
+        return None
+    if isinstance(value, (list, tuple)):
+        items = value
+    else:
+        text = str(value)
+        for sep in [";", " "]:
+            text = text.replace(sep, ",")
+        items = [item for item in (part.strip() for part in text.split(",")) if item]
+
+    values: list[float] = []
+    for item in items:
+        parsed = _parse_float(item)
+        if parsed is None:
             return None
-    if value_type == "int":
-        try:
-            return int(str(raw))
-        except ValueError:
-            return None
-    if value_type == "bool":
-        return str(raw).strip().lower() in {"1", "true", "да", "yes"}
-    return str(raw).strip()
+        values.append(parsed)
+    return tuple(values)
 
 
 def _build_params(args_list: list[dict[str, Any]] | None) -> dict[str, object]:
     if not args_list:
         return {}
     params: dict[str, object] = {}
+    float_list_params = {"allowed_values"}
+    string_set_params = {"target_font_names"}
+    float_params = {
+        "expected_mm",
+        "min_valid_share",
+        "min_size_pt",
+        "max_below_threshold_share",
+        "max_italic_share",
+        "max_non_black_share",
+        "min_target_share",
+    }
+
     for arg in args_list:
         if not isinstance(arg, dict):
             continue
         name = str(arg.get("name", "") or "").strip()
         if not name:
             continue
-        value_type = str(arg.get("type", "") or "").strip().lower() or None
-        coerced = _coerce_value(arg.get("val"), value_type)
-        if coerced is None:
+        raw_value = arg.get("val")
+
+        if name in float_list_params:
+            parsed = _parse_float_list(raw_value)
+            if parsed is None:
+                continue
+            params[name] = parsed
             continue
-        params[name] = coerced
+
+        if name in string_set_params:
+            raw_text = str(raw_value or "").strip()
+            normalized = raw_text.replace(";", ",")
+            items = [item.strip() for item in normalized.split(",") if item.strip()]
+            params[name] = set(items) if items else {raw_text}
+            continue
+
+        if name in float_params or name.endswith("_share") or name.endswith("_mm") or name.endswith("_pt"):
+            parsed = _parse_float(raw_value)
+            if parsed is None:
+                continue
+            params[name] = parsed
+            continue
+
+        params[name] = str(raw_value or "").strip()
     return params
 
 
@@ -127,7 +154,7 @@ class CustomRulesValidator(BaseValidator):
             rule_id = str(rule.get("rule_id", "") or "").strip()
             section = str(rule.get("section", "") or "").strip()
             description = str(rule.get("description", "") or "").strip()
-            severity = str(rule.get("severity", "RECOMMENDATION") or "RECOMMENDATION").strip().upper()
+            severity = str(rule.get("severity") or "RECOMMENDATION").strip()
             function_id = str(rule.get("func", "") or "").strip()
             args_list = rule.get("args") if isinstance(rule.get("args"), list) else None
             params = _build_params(args_list)
@@ -150,9 +177,9 @@ class CustomRulesValidator(BaseValidator):
             status = _resolve_status(check_result)
 
             message = None
-            share = check_result.get("share")
-            if isinstance(share, (int, float)):
-                message = f"Доля: {share * 100:.1f}%"
+            # share = check_result.get("share")
+            # if isinstance(share, (int, float)):
+            #     message = f"Доля: {share * 100:.1f}%"
 
             rule_result = RuleResult(
                 rule_id=rule_id,
@@ -165,14 +192,5 @@ class CustomRulesValidator(BaseValidator):
                 implemented=True,
             )
             result.rule_results.append(rule_result)
-
-            if status == "FAIL":
-                try:
-                    severity_enum = Severity(severity)
-                except ValueError:
-                    severity_enum = Severity.RECOMMENDATION
-                result.errors.append((severity_enum, message or f"Нарушено правило {rule_id}"))
-                if severity_enum == Severity.CRITICAL:
-                    result.is_valid = False
 
         return result

@@ -31,6 +31,53 @@ def validate_float(weight_str) -> tuple[bool, float | None, str]:
         return False, None, "Число должно быть числом"
     return True, weight, ""
 
+
+def _parse_float(value: str | None) -> float | None:
+    if value is None:
+        return None
+    try:
+        return float(str(value).replace(",", "."))
+    except ValueError:
+        return None
+
+
+def _parse_float_list(value: str | None) -> list[float] | None:
+    if value is None:
+        return None
+    text = str(value)
+    for sep in [";", " "]:
+        text = text.replace(sep, ",")
+    items = [item for item in (part.strip() for part in text.split(",")) if item]
+    values: list[float] = []
+    for item in items:
+        parsed = _parse_float(item)
+        if parsed is None:
+            return None
+        values.append(parsed)
+    return values
+
+
+def validate_rule_arg(name: str, raw_value: str | None) -> tuple[bool, object | None, str]:
+    float_list_params = {"allowed_values"}
+    string_params = {"target_font_names"}
+
+    if name in float_list_params:
+        parsed = _parse_float_list(raw_value)
+        if parsed is None:
+            return False, None, "Список должен быть числами"
+        return True, raw_value or "", ""
+
+    if name in string_params:
+        return validate_str(raw_value or "")
+
+    if name.endswith("_share") or name.endswith("_mm") or name.endswith("_pt"):
+        parsed = _parse_float(raw_value)
+        if parsed is None:
+            return False, None, "Число должно быть числом"
+        return True, raw_value or "", ""
+
+    return validate_str(raw_value or "")
+
 # Можно добавить санитизацию для вывода, если данные вставляются в HTML-атрибуты
 def sanitize_for_html(text: str) -> str:
     """Экранирует специальные символы для безопасного вывода в HTML."""

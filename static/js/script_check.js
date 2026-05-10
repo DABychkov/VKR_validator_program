@@ -215,6 +215,10 @@ $(document).ready(function () {
     // устанавливаем selected  в select-function
     $("#select-function").val(data['func']);
 
+    
+    // устанавливаем selected  в select-function
+    $("#select-importance").val(data['severity']);
+
     // прописываем значения в текстовые поля
     $('textarea[name="rule_desc"]').val(data['description']);
     $('textarea[name="gost_ref"]').val(data['gost_ref']);
@@ -266,6 +270,7 @@ $(document).ready(function () {
     const found = funcArray.find(item => item.id_func === targetId);
     return found ? found.agr : null; // или []
   }
+
 
   // --------------------------------------------------------
   // отрабатываем изменение select в modal-ном окне когда изменяем или выбираем 
@@ -744,6 +749,8 @@ $(document).ready(function () {
       }
     });
   });
+
+
 
 
 });
