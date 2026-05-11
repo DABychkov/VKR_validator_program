@@ -13,7 +13,7 @@ CHECKS_CATALOG: list[dict[str, object]] = [
         "id_func": "check_line_spacing_share",
         "name": "Межстрочный интервал",
         "agr": [
-            {"name": "allowed_values", "type": "str", "desc": "Допустимые значения (через запятую)",'um':'мм'},
+            {"name": "allowed_values", "type": "str", "desc": "Допустимые значения (через \";\")",'um':'мм'},
             {"name": "min_valid_share", "type": "str", "desc": "Минимальная доля",'um':'(0-1)'},
         ],
     },

@@ -68,7 +68,16 @@ def validate_rule_arg(name: str, raw_value: str | None) -> tuple[bool, object | 
         return True, raw_value or "", ""
 
     if name in string_params:
-        return validate_str(raw_value or "")
+        raw_text = raw_value or ""
+        normalized = raw_text.replace(";", ",")
+        tokens = [item.strip() for item in normalized.split(",") if item.strip()]
+        if not tokens:
+            return False, None, "Строка не может быть пустым"
+        for token in tokens:
+            is_valid, _, name_err = validate_str(token)
+            if not is_valid:
+                return False, None, name_err
+        return True, raw_text, ""
 
     if name.endswith("_share") or name.endswith("_mm") or name.endswith("_pt"):
         parsed = _parse_float(raw_value)
