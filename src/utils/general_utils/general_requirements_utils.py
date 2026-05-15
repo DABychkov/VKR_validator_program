@@ -1,4 +1,4 @@
-"""Параметризованные проверки для правил GENERAL-001..GENERAL-009."""
+"""Параметризованные проверки для общих правил оформления."""
 
 from typing import Any, Iterable
 
@@ -257,7 +257,7 @@ def check_target_font_share(
 def check_page_numbering_present(
     footer_features: Iterable[Any],
 ) -> list[int]:
-    """Возвращает section_index секций без поля нумерации страницы (PAGE)."""
+    """Возвращает section_index секций без поля нумерации страницы."""
     invalid_sections: list[int] = []
     for footer in footer_features:
         has_page_field = bool(getattr(footer, "has_page_field", False))

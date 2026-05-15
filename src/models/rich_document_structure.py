@@ -1,10 +1,4 @@
-"""Расширенная модель структуры документа для форматно-стилевых проверок.
-
-Важно:
-- Этот модуль дополняет, а не заменяет текущую текстовую модель.
-- Старые валидаторы могут продолжать работать по DocumentStructure.
-- Новые строгие валидаторы работают по RichDocumentStructure.
-"""
+"""Расширенная модель структуры документа для форматно-стилевых проверок."""
 
 from dataclasses import dataclass, field
 from typing import Literal
@@ -135,7 +129,7 @@ class FormulaFeature:
     has_explanation_where: bool | None = None  # есть "где"/"where" объяснение
     explanation_sequence_score: float | None = None  # качество объяснения
 
-    omml_xml: str | None = None  # низкоуровневый Office Open XML (если нужен)
+    omml_xml: str | None = None  # низкоуровневый Office Open XML
 
 
 @dataclass

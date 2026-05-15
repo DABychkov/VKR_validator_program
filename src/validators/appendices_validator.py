@@ -1,4 +1,4 @@
-"""Валидатор раздела 1.10 "ПРИЛОЖЕНИЯ"."""
+"""Валидатор "ПРИЛОЖЕНИЯ"."""
 
 from ..models.document_structure import DocumentStructure
 from ..models.validation_result import ValidationResult
@@ -25,7 +25,6 @@ from .base_validator import BaseValidator
 
 
 class AppendicesValidator(BaseValidator):
-    """Проверка структурного элемента 1.10 по ТЗ."""
 
     APPENDIX_KEYWORD = SECTION_APPENDIX
     INVALID_CYRILLIC_LABELS = {"Ё", "З", "Й", "О", "Ч", "Ъ", "Ы", "Ь"}

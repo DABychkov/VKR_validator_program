@@ -1,4 +1,4 @@
-"""Общие helper-функции для extractor-модулей."""
+"""Общие функции для extractor-модулей."""
 
 from __future__ import annotations
 

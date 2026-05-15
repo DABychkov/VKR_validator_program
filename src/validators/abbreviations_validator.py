@@ -1,4 +1,4 @@
-"""Валидатор раздела 1.7 "ПЕРЕЧЕНЬ СОКРАЩЕНИЙ И ОБОЗНАЧЕНИЙ"."""
+"""Валидатор "ПЕРЕЧЕНЬ СОКРАЩЕНИЙ И ОБОЗНАЧЕНИЙ"."""
 
 from ..models.document_structure import DocumentStructure
 from ..models.validation_result import ValidationResult
@@ -22,7 +22,7 @@ from .base_validator import BaseValidator
 
 
 class AbbreviationsValidator(BaseValidator):
-    """Проверка структурного элемента 1.7 по ТЗ."""
+    """Проверка структурного элемента."""
 
     EXPECTED_INTRO = "В настоящем отчете о НИР применяют следующие сокращения и обозначения"
 
@@ -85,7 +85,7 @@ class AbbreviationsValidator(BaseValidator):
 
         abbreviations = [left for left, _, _ in items]
 
-        # По ТЗ: без отступа в левой колонке.
+        # без отступа в левой колонке.
         indented = [raw for _, _, raw in items if has_left_indentation(raw)]
         if indented:
             result.add_rule(
@@ -97,7 +97,7 @@ class AbbreviationsValidator(BaseValidator):
         else:
             result.add_rule("ABBR-004", "OK")
 
-        # По ТЗ: алфавитный порядок.
+        # алфавитный порядок.
         if not is_alphabetical(abbreviations):
             result.add_rule(
                 "ABBR-005",
@@ -108,7 +108,7 @@ class AbbreviationsValidator(BaseValidator):
         else:
             result.add_rule("ABBR-005", "OK")
 
-        # По ТЗ: без знаков препинания в конце сокращения и расшифровки.
+        # без знаков препинания в конце сокращения и расшифровки.
         bad_left = [left for left, _, _ in items if left.rstrip().endswith((".", ";", ":", ","))]
         bad_right = [right for _, right, _ in items if right.rstrip().endswith((".", ";", ":", ","))]
         if bad_left or bad_right:

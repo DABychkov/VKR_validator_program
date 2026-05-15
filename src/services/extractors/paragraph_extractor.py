@@ -1,6 +1,4 @@
 """Извлечение признаков абзацев и run-ов.
-
-Текущий файл — скелет. Реализацию добавляем поэтапно.
 """
 
 from __future__ import annotations
@@ -104,16 +102,6 @@ def _resolve_section_hint(
 
 def extract_paragraph_features(doc: Document) -> list[ParagraphFeature]:
     """Возвращает признаки абзацев документа в исходном порядке.
-
-    Этап 1 (минимум):
-    - text
-    - alignment
-    - first_line_indent_mm
-    - runs_features (font_name/font_size/bold/italic)
-
-    TODO:
-    - Добавить section_hint через внешний маппинг секций.
-    - Добавить ratio-метрики (bold_ratio/italic_ratio).
     """
     paragraph_features: list[ParagraphFeature] = []
 

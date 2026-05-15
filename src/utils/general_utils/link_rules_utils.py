@@ -1,4 +1,4 @@
-"""Проверки для правил LINK-* (ссылки)."""
+"""Проверки для правил ссылки."""
 
 from __future__ import annotations
 
@@ -74,7 +74,7 @@ def check_table_link_before_table(links_features: Iterable[Any], table_features:
 
 
 def check_links_resolve_to_existing_targets(links_features: Iterable[Any]) -> list[int]:
-    """LINK-003: ссылки на источники/рисунки/таблицы/формулы должны резолвиться в существующие цели."""
+    """ссылки на источники/рисунки/таблицы/формулы должны резолвиться в существующие цели."""
     invalid_link_paragraph_indexes: list[int] = []
     supported_types = {"source", "figure", "table", "formula"}
 

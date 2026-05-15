@@ -223,7 +223,7 @@ class DocumentParser:
     def _is_reference_item_line(self, text: str) -> bool:
         """Проверяет, является ли строка нумерованной записью списка источников."""
         # Форматы: "1 Автор", "1. Автор", "12 Название"
-        # Макс. 3 цифры — чтобы годы (2006, 2009 и т.д.) не совпадали.
+        # Макс. 3 цифры - чтобы годы (2006, 2009 и т.д.) не совпадали.
         return bool(RE_NUMBERED_LIST_ITEM_LINE.match(text.strip()))
 
     def _is_contents_item_line(self, text: str) -> bool:

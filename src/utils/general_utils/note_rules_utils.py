@@ -1,4 +1,4 @@
-"""Проверки для правил NOTE-* (примечания)."""
+"""Проверки для правил примечания."""
 
 from __future__ import annotations
 
@@ -50,10 +50,6 @@ def _strip_number_prefix(text: str) -> str:
 
 def _note_keyword_is_capitalized(raw_text: str) -> bool | None:
     """Проверяет, что слово Примечание/Примечания начинается с прописной буквы.
-
-    Возвращает:
-    - True/False если ключевое слово найдено,
-    - None если в начале строки нет слова-маркера примечания.
     """
     stripped = _strip_number_prefix(raw_text)
     lowered = stripped.lower()
@@ -67,7 +63,6 @@ def _note_keyword_is_capitalized(raw_text: str) -> bool | None:
 
 def _extract_note_body(raw_text: str, note_kind: str | None = None) -> str:
     """Возвращает содержательную часть примечания после служебного префикса.
-
     Для group_item не удаляем слово "Примечание", если оно является частью текста.
     """
     text = _normalize_spaces(raw_text)
@@ -206,11 +201,6 @@ def check_note_group_header_plural_for_multiple(note_features: Iterable[Any]) ->
 
 def check_note_dash_numbering_consistency(note_features: Iterable[Any]) -> list[int]:
     """тире и нумерация должны использоваться согласованно.
-
-    Логика по ТЗ:
-    - если есть тире, то у текущего примечания не должно быть item_number;
-    - для одиночного примечания используется тире и нет нумерации;
-    - для группы: заголовок без тире, а пункты группы с нумерацией.
     """
     notes = list(note_features)
     invalid_paragraph_indexes: set[int] = set()

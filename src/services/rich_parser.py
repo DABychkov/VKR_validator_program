@@ -52,7 +52,6 @@ class RichParser:
         footnote_features = extract_footnote_features(doc)
         toc_entries = extract_toc_entries(doc)
 
-        # TODO: language_hint, sections_detected.
         return RichDocumentStructure(
             source_file=os.path.abspath(file_path),
             paragraph_features=paragraph_features,

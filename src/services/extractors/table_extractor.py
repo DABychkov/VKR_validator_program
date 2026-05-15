@@ -1,6 +1,4 @@
 """Извлечение признаков таблиц.
-
-Текущий файл — скелет. Реализацию добавляем поэтапно.
 """
 
 from __future__ import annotations
@@ -212,7 +210,7 @@ def _resolve_table_title_near_anchor(
     if anchor_paragraph_index is None:
         return None, None, "unknown"
 
-    # 1) Предпочитаем стандартный случай: заголовок над таблицей.
+    # 1) стандартный случай - заголовок над таблицей
     for probe_index in (anchor_paragraph_index, anchor_paragraph_index - 1, anchor_paragraph_index - 2):
         if not (0 <= probe_index < len(paragraphs)):
             continue
@@ -228,7 +226,7 @@ def _resolve_table_title_near_anchor(
         # Встретили непустой абзац без заголовка: дальше вверх уже не считаем заголовком этой таблицы.
         break
 
-    # 2) Нестандартный случай: заголовок под таблицей.
+    # 2) Нестандартный случай - заголовок под таблицей
     for probe_index in (anchor_paragraph_index + 1, anchor_paragraph_index + 2):
         if not (0 <= probe_index < len(paragraphs)):
             continue
@@ -273,15 +271,6 @@ def _is_in_appendix_context(paragraphs: list[object], anchor_paragraph_index: in
 
 def extract_table_features(doc: Document) -> list[TableFeature]:
     """Возвращает признаки таблиц документа.
-
-    Этап 2 (минимум):
-    - rows_count / cols_count
-    - cell_text_map
-    - title_above_text (эвристика по предыдущему абзацу)
-
-    TODO:
-    - Добавить анализ границ/диагоналей через XML.
-    - Добавить распознавание "Продолжение таблицы N".
     """
     table_features: list[TableFeature] = []
     prev_paragraph_map = _table_prev_paragraph_map(doc)

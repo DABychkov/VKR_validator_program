@@ -1,4 +1,4 @@
-"""Проверки для правил FOOT-* (сноски)."""
+"""Проверки для правил сноски."""
 
 from __future__ import annotations
 
@@ -45,12 +45,12 @@ def has_any_footnotes(footnote_features: Iterable[Any]) -> bool:
 
 
 def check_footnote_markers_resolved(footnote_features: Iterable[Any]) -> list[int]:
-    """маркеры сносок должны резолвиться в footnotes.xml.
+    """маркеры сносок должны быть определены в footnotes.xml.
 
     Возвращает paragraph_index маркеров, у которых resolved_in_footnotes_part == False.
     Значение None трактуется как "неизвестно" и в эту проверку не включается.
 
-    Важно: тип маркера (xml_reference/asterisk/custom) не важен,
+    Тип маркера (xml_reference/asterisk/custom) не важен,
     используется уже рассчитанный флаг resolved_in_footnotes_part.
     """
     invalid_paragraph_indexes: list[int] = []
@@ -77,9 +77,6 @@ def check_footnote_markers_resolution_unknown(footnote_features: Iterable[Any]) 
 
 def check_footnote_separator_present(footnote_features: Iterable[Any]) -> list[int]:
     """при наличии сносок должна быть обнаружена разделительная линия.
-
-    Возвращает paragraph_index маркеров, у которых has_separator_line == False.
-    Значение None трактуется как "неизвестно" и в эту проверку не включается.
     """
     features = _as_list(footnote_features)
     return _collect_indexes_if_any_flag_equals(
@@ -91,10 +88,6 @@ def check_footnote_separator_present(footnote_features: Iterable[Any]) -> list[i
 
 def check_footnote_separator_short_left(footnote_features: Iterable[Any]) -> list[int]:
     """разделительная линия сносок должна быть короткой слева (эвристика).
-
-    Возвращает paragraph_index маркеров,
-    у которых separator_short_left_heuristic == False.
-    Значение None трактуется как "неизвестно" и в эту проверку не включается.
     """
     features = _as_list(footnote_features)
     return _collect_indexes_if_any_flag_equals(

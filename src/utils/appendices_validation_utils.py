@@ -24,7 +24,7 @@ def extract_title(header: str) -> str | None:
     if len(lines) < 2:
         return None
 
-    # Якорная логика: после первой строки "ПРИЛОЖЕНИЕ X"
+    # Якорь - после первой строки "ПРИЛОЖЕНИЕ X"
     # берем первую осмысленную строку, исключая строку статуса и
     # случайное повторение строки "ПРИЛОЖЕНИЕ ...".
     for candidate in lines[1:]:
@@ -92,7 +92,6 @@ def extract_title_with_rich_fallback(
     rich_doc: Any | None,
 ) -> tuple[str | None, int]:
     """Извлекает название приложения и число строк section_text, занятых заголовком.
-
     consumed_lines относится только к строкам section_text. Поэтому в rich-ветке,
     когда заголовок найден по paragraph_features, увеличиваем consumed только на
     строки, реально относящиеся к section_text (например, fallback-статус),

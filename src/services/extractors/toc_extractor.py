@@ -44,7 +44,7 @@ def extract_toc_entries(doc: Document) -> list[TocEntryFeature]:
 
     body = doc.element.body
     for block_idx, child in enumerate(body.iterchildren()):
-        # Ищем именно sdt-блоки (content controls), где Word обычно хранит авто-оглавление.
+        # Ищем именно sdt-блоки, где Word обычно хранит авто-оглавление.
         if not str(child.tag).endswith("}sdt"):
             continue
 

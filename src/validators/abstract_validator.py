@@ -1,4 +1,4 @@
-"""Валидатор реферата по ГОСТ 7.32-2017."""
+"""Валидатор реферата."""
 
 from ..models.document_structure import DocumentStructure
 from ..models.validation_result import ValidationResult
@@ -14,15 +14,6 @@ from .base_validator import BaseValidator
 
 
 class AbstractValidator(BaseValidator):
-    """
-    Валидатор реферата (структурный элемент 1.4 по ТЗ).
-    
-    Проверяет:
-    1. Наличие сведений об объеме (страницы, книги, иллюстрации, таблицы, источники, приложения)
-    2. Формат ключевых слов (капс, запятые, без точки)
-    3. Ключевые фразы в тексте реферата (цель, объект - рекомендация)
-    4. Объем реферата (>= 850 символов - рекомендация)
-    """
     
     MIN_ABSTRACT_SIZE = 850  # Минимум символов в реферате
     
@@ -59,7 +50,6 @@ class AbstractValidator(BaseValidator):
         else:
             result.add_rule("ABSTRACT-002", "OK", implemented=True)
 
-        # ABSTRACT-003: Проверка формата разделителей
         if len(found_metrics) < 2:
             result.add_rule(
                 "ABSTRACT-003",
@@ -79,8 +69,7 @@ class AbstractValidator(BaseValidator):
         
         # 2. Проверка ключевых слов
         keywords_section, format_check = check_keywords(lines)
-        
-        # ABSTRACT-004: Наличие ключевых слов
+
         if not keywords_section:
             result.add_rule(
                 "ABSTRACT-004",
@@ -91,7 +80,6 @@ class AbstractValidator(BaseValidator):
         else:
             result.add_rule("ABSTRACT-004", "OK", implemented=True)
 
-            # ABSTRACT-005: Капс
             if not format_check["is_uppercase"]:
                 result.add_rule(
                     "ABSTRACT-005",
@@ -102,7 +90,6 @@ class AbstractValidator(BaseValidator):
             else:
                 result.add_rule("ABSTRACT-005", "OK", implemented=True)
 
-            # ABSTRACT-006: Запятые как разделители
             if not format_check["has_commas"]:
                 result.add_rule(
                     "ABSTRACT-006",
@@ -113,7 +100,6 @@ class AbstractValidator(BaseValidator):
             else:
                 result.add_rule("ABSTRACT-006", "OK", implemented=True)
 
-            # ABSTRACT-007: Без точки в конце
             if not format_check["no_trailing_period"]:
                 result.add_rule(
                     "ABSTRACT-007",
@@ -124,7 +110,6 @@ class AbstractValidator(BaseValidator):
             else:
                 result.add_rule("ABSTRACT-007", "OK", implemented=True)
 
-            # ABSTRACT-008: Нет переносов (не более 4 строк)
             if not format_check["no_line_breaks"]:
                 result.add_rule(
                     "ABSTRACT-008",

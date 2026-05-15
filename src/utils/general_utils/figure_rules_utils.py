@@ -1,4 +1,4 @@
-"""Проверки для правил FIG-* (рисунки)."""
+"""Проверки для правил рисунков"""
 
 from __future__ import annotations
 
@@ -7,9 +7,9 @@ from typing import Any
 
 
 def filter_figure_captions_for_validation(figure_caption_features: Iterable[Any]) -> list[Any]:
-    """Оставляет подписи, к которым применимы проверки FIG-*.
+    """Оставляет подписи, к которым применимы проверки.
 
-    Если подпись визуально над рисунком (drawing above), но не по центру —
+    Если подпись визуально над рисунком (drawing above), но не по центру -
     считаем запись нецелевой (часто служебный/обрывочный блок) и не проверяем.
     """
     filtered: list[Any] = []

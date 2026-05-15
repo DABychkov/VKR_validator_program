@@ -1,4 +1,4 @@
-"""Валидатор раздела 1.9 "СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ"."""
+"""Валидатор "СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ"."""
 
 from ..models.document_structure import DocumentStructure
 from ..models.validation_result import ValidationResult
@@ -12,15 +12,6 @@ from .base_validator import BaseValidator
 
 
 class ReferencesValidator(BaseValidator):
-    """
-
-    По ТЗ:
-    - Раздел обязательный. Проверяем наличие фразы "СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ".
-    - После фразы текст не должен быть пустым.
-    - Список должен начинаться с "1.".
-    - Рекомендация: в каждом элементе должны быть инициалы (шаблон «Буква.Буква.»).
-    """
-
     # Шаблон элемента списка: «1.», «2.» и т.д., а также «1 Автор» (без точки).
     _LIST_ITEM_RE = RE_NUMBERED_LIST_ITEM_LINE
 

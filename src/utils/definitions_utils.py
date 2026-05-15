@@ -17,18 +17,12 @@ from .common.text_utils import (
 def split_definition_item(line: str) -> Optional[tuple[str, str]]:
     """
     Пытается извлечь пару (левый термин, правое определение) из строки.
-
-    Поддерживаем варианты:
-    - "TERM — definition"
-    - "TERM – definition"
-    - "TERM - definition"
-    - "TERM\tdefinition" (Word-табуляция)
     """
     raw = line.strip()
     if not raw:
         return None
 
-    # Приоритет 1: табуляция (часто используется в DOCX как псевдотаблица)
+    #  табуляция (часто используется в DOCX как псевдотаблица)
     if "\t" in raw:
         parts = [p.strip() for p in raw.split("\t") if p.strip()]
         if len(parts) >= 2:
@@ -37,7 +31,7 @@ def split_definition_item(line: str) -> Optional[tuple[str, str]]:
             if left and right:
                 return left, right
 
-    # Приоритет 2: тире/дефис
+    # тире/дефис
     dash_match = RE_DEFINITION_ITEM_DASH.match(raw)
     if dash_match:
         left = dash_match.group("left").strip()
@@ -51,11 +45,9 @@ def split_definition_item(line: str) -> Optional[tuple[str, str]]:
 def extract_definition_items(section_text: str) -> list[tuple[str, str, str]]:
     """
     Извлекает элементы списка определений.
-
-    Возвращает список тройек:
-    - left: термин/сокращение
-    - right: определение
-    - raw_line: исходная строка (для диагностики)
+    left: термин/сокращение
+    right: определение
+    raw_line: исходная строка
     """
     items: list[tuple[str, str, str]] = []
     for line in get_non_empty_lines(section_text, strip=False):

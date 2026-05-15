@@ -1,4 +1,4 @@
-"""Проверки для правил FORMULA-* (формулы)."""
+"""Проверки для правил формулы."""
 
 from __future__ import annotations
 
@@ -43,7 +43,7 @@ def check_formula_where_format(formula_features: Iterable[Any]) -> list[int]:
 
 
 def check_formula_number_right(formula_features: Iterable[Any]) -> list[int]:
-    """номер формулы (при наличии) должен быть справа."""
+    """номер формулы должен быть справа."""
     invalid_indexes: list[int] = []
     for formula in formula_features:
         if not has_formula_number(formula):
@@ -61,7 +61,7 @@ def check_formula_number_right(formula_features: Iterable[Any]) -> list[int]:
 
 
 def check_formula_number_pattern(formula_features: Iterable[Any]) -> list[int]:
-    """номер формулы (при наличии) должен соответствовать допустимому шаблону."""
+    """номер формулы должен соответствовать допустимому шаблону."""
     invalid_indexes: list[int] = []
     allowed_patterns = {
         "formula_number_global",

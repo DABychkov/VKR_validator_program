@@ -1,4 +1,4 @@
-"""Проверки для правил TABLE-* (таблицы)."""
+"""Проверки для правил таблицы."""
 
 from __future__ import annotations
 
@@ -126,7 +126,7 @@ def check_table_number_pattern(table_features: Iterable[Any]) -> list[int]:
 
 
 def check_table_title_dash_separator(table_features: Iterable[Any]) -> list[int]:
-	"""наименование таблицы (при наличии) должно идти через тире."""
+	"""наименование таблицы должно идти через тире."""
 	invalid_indexes: list[int] = []
 	for table in table_features:
 		table_index = int(getattr(table, "table_index", -1))
@@ -151,7 +151,7 @@ def check_table_title_dash_separator(table_features: Iterable[Any]) -> list[int]
 
 
 def check_table_title_capital_no_period(table_features: Iterable[Any]) -> list[int]:
-	"""наименование таблицы (при наличии) с прописной буквы и без точки в конце."""
+	"""наименование таблицы с прописной буквы и без точки в конце."""
 	invalid_indexes: list[int] = []
 	for table in table_features:
 		table_index = int(getattr(table, "table_index", -1))

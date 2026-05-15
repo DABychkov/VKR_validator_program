@@ -211,10 +211,6 @@ def extract_section_page_settings(doc: Document) -> list[SectionPageSettingsFeat
 
 def extract_footer_features(doc: Document) -> list[FooterFeature]:
     """Возвращает признаки пагинации из футеров.
-
-    Важно:
-    - Вычисление фактического номера каждой страницы этим методом не делается.
-    - Метод собирает только механику (PAGE field, выравнивание, restart).
     """
     footer_features: list[FooterFeature] = []
 

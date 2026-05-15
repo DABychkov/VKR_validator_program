@@ -1,4 +1,4 @@
-"""Валидатор раздела 1.6 "ТЕРМИНЫ И ОПРЕДЕЛЕНИЯ"."""
+"""Валидатор "ТЕРМИНЫ И ОПРЕДЕЛЕНИЯ"."""
 
 from ..models.document_structure import DocumentStructure
 from ..models.validation_result import ValidationResult
@@ -22,7 +22,6 @@ from .base_validator import BaseValidator
 
 
 class TermsValidator(BaseValidator):
-    """Проверка структурного элемента 1.6 по ТЗ."""
 
     EXPECTED_INTRO = (
         "В настоящем отчете о НИР применяют следующие термины "
@@ -88,7 +87,6 @@ class TermsValidator(BaseValidator):
 
         terms = [left for left, _, _ in items]
 
-        # По ТЗ: слева без абзацного отступа.
         indented = [raw for _, _, raw in items if has_left_indentation(raw)]
         if indented:
             result.add_rule(
@@ -99,7 +97,6 @@ class TermsValidator(BaseValidator):
         else:
             result.add_rule("TERMS-004", "OK")
 
-        # По ТЗ: без знаков препинания в конце термина и определения.
         bad_left = [left for left, _, _ in items if left.rstrip().endswith((".", ";", ":", ","))]
         bad_right = [right for _, right, _ in items if right.rstrip().endswith((".", ";", ":", ","))]
         if bad_left or bad_right:
@@ -111,7 +108,6 @@ class TermsValidator(BaseValidator):
         else:
             result.add_rule("TERMS-005", "OK")
 
-        # По ТЗ: алфавитный порядок.
         if not is_alphabetical(terms):
             result.add_rule(
                 "TERMS-006",

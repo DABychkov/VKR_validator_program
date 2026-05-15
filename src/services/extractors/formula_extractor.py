@@ -1,8 +1,6 @@
 """Извлечение признаков формул/уравнений.
-
-Реализация опирается на:
-- OMML XML (m:oMath / m:oMathPara)
-- текстовые эвристики (номер формулы, "где", пустые строки)
+Реализация опирается на OMML XML (m:oMath / m:oMathPara) и
+текстовые эвристики (номер формулы, "где", пустые строки)
 """
 
 from __future__ import annotations
@@ -109,11 +107,8 @@ def _number_alignment_right(paragraph: object, formula_number: str | None) -> bo
 
 
 def extract_formula_features(doc: Document) -> list[FormulaFeature]:
-    """Возвращает признаки формул.
-
-    Этап 2-3:
-    - text/regex признаки (номер, где, пустые строки)
-    - опционально OMML XML для точной диагностики
+    """Возвращает признаки формул: text/regex признаки (номер, где, пустые строки) и
+    опционально OMML XML для точной диагностики
     """
     features: list[FormulaFeature] = []
     paragraphs = list(doc.paragraphs)

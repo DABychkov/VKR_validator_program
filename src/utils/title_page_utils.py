@@ -12,9 +12,6 @@ from .common.text_utils import is_uppercase_text
 def find_organization_block(paragraphs: list[str], start_idx: int = 0, end_idx: int = 15) -> list[str]:
     """
     Ищет блок с наименованием организации (верхняя часть титульника).
-    
-    Блок должен быть в верхних строках (0-15) и состоять из текста капсом.
-    Пропускаем начальные не-капс строки (министерство может быть не капсом).
     """
     service_tokens = ("УДК", "РЕГ", "НИОКТР", "ИКРБС", "УТВЕРЖДАЮ", "СОГЛАСОВАНО", "ОТЧЕТ")
 
@@ -42,7 +39,7 @@ def find_organization_block(paragraphs: list[str], start_idx: int = 0, end_idx: 
     block_end: int | None = None
     quoted_anchor = False
 
-    # 1) Первый организационный якорь
+    # 1) Первый якорь
     for i, para in enumerate(window):
         text = para.strip()
         if not text:
@@ -52,7 +49,7 @@ def find_organization_block(paragraphs: list[str], start_idx: int = 0, end_idx: 
         if any(token in text_upper for token in service_tokens):
             continue
 
-        # Вариант A: первая капс-строка -> собираем подряд идущий капс-блок
+        # 1: первая капс-строка -> собираем подряд идущий капс-блок
         if _is_caps_line(text) and not text.startswith(("(", '"', "«")):
             org_block = [text]
             block_end = i
@@ -73,7 +70,7 @@ def find_organization_block(paragraphs: list[str], start_idx: int = 0, end_idx: 
                 break
             break
 
-        # Вариант B: строка с капсом в кавычках (например: ... "РИННОТЕХ")
+        # 2: строка с капсом в кавычках (например: ... "РИННОТЕХ")
         quoted = _extract_caps_in_quotes(text)
         if quoted:
             org_block = [quoted]
@@ -107,7 +104,7 @@ def find_organization_block(paragraphs: list[str], start_idx: int = 0, end_idx: 
 
 def find_metadata_block(paragraphs: list[str]) -> dict[str, str]:
     """
-    Ищет блок с УДК, регистрационными номерами (левая сторона титульника).
+    Ищет блок с УДК, регистрационными номерами.
     
     Возвращает словарь: {"УДК": "...", "Рег. N НИОКТР": "...", ...}
     """
@@ -126,7 +123,6 @@ def find_metadata_block(paragraphs: list[str]) -> dict[str, str]:
 def find_approval_stamp(paragraphs: list[str]) -> tuple[str | None, str | None]:
     """
     Ищет грифы СОГЛАСОВАНО и УТВЕРЖДАЮ.
-    
     Возвращает кортеж: (согласовано_текст, утверждаю_текст)
     """
     sogl = None
@@ -145,8 +141,6 @@ def find_approval_stamp(paragraphs: list[str]) -> tuple[str | None, str | None]:
 def find_document_type(paragraphs: list[str]) -> str | None:
     """
     Ищет тип документа (ОТЧЕТ О НАУЧНО-ИССЛЕДОВАТЕЛЬСКОЙ РАБОТЕ).
-    
-    Должно быть капсом, две строки: "ОТЧЕТ" и "О НАУЧНО-ИССЛЕДОВАТЕЛЬСКОЙ РАБОТЕ".
     """
     def _normalize(text: str) -> str:
         normalized = text.upper().replace("Ё", "Е")
@@ -175,9 +169,7 @@ def find_document_type(paragraphs: list[str]) -> str | None:
 
 def extract_initials(text: str) -> list[str]:
     """
-    Извлекает инициалы из текста (например, 'А.В. Иванов' → ['А.В.']).
-    
-    Паттерн: заглавная буква + точка + заглавная буква + точка
+    Извлекает инициалы из текста
     """
     return RE_INITIALS.findall(text)
 
@@ -185,10 +177,6 @@ def extract_initials(text: str) -> list[str]:
 def find_place_and_year(paragraphs: list[str]) -> tuple[str | None, int | None]:
     """
     Ищет место и год на титульнике.
-    
-    Формат: "Москва 2026" или "Москва, 2026" или просто "2026"
-    Ищет снизу вверх по всем строкам титульника.
-    Возвращает: (место, год)
     """
     # Ищем последний год (снизу вверх) через общий helper.
     year = find_last_int_by_pattern(paragraphs, RE_YEAR_1900_2099, group=1)

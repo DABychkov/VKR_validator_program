@@ -10,16 +10,6 @@ from .base_validator import BaseValidator
 
 
 class ExecutorListValidator(BaseValidator):
-    """
-    Валидатор списка исполнителей (структурный элемент 1.3 по ТЗ).
-    
-    Правила:
-    - Условный элемент (если исполнителей > 2)
-    - Если 1 исполнитель -> должен быть на титульнике "Исполнитель:"
-    - Формат: слева должности/степени, справа инициалы+фамилия
-    - Обязательные роли: "Исполнители:"
-    - Условные роли: "Отв. Исполнитель", "Соисполнители:"
-    """
     
     def validate(self, document: DocumentStructure) -> ValidationResult:
         result = ValidationResult(validator_name="ExecutorListValidator")

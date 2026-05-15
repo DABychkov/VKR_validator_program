@@ -14,21 +14,6 @@ from .base_validator import BaseValidator
 
 
 class TitlePageValidator(BaseValidator):
-    """
-    Валидатор титульного листа по ГОСТ 7.32-2017.
-    
-    Проверяет 10 основных блоков титульника:
-    1. Наименование организации
-    2. Метаданные (УДК, рег. номера)
-    3. Грифы СОГЛАСОВАНО и УТВЕРЖДАЮ
-    4. Вид документа (ОТЧЕТ О НИР)
-    5. Наименование НИР
-    6. Наименование отчета
-    7. Вид отчета (промежуточный/заключительный)
-    8. Шифр программы/темы
-    9. Номер книги
-    10. Руководитель + место и год
-    """
     
     def validate(self, document: DocumentStructure) -> ValidationResult:
         result = ValidationResult(validator_name="TitlePageValidator")
@@ -39,7 +24,7 @@ class TitlePageValidator(BaseValidator):
         # 1. Проверка организации (обязательно)
         org_block, has_org_keywords = check_organization(paragraphs)
         
-        # TITLE-001: блок организации с заглавными буквами
+        # блок организации с заглавными буквами
         if not org_block:
             result.add_rule(
                 "TITLE-001",
@@ -50,7 +35,7 @@ class TitlePageValidator(BaseValidator):
         else:
             result.add_rule("TITLE-001", "OK", implemented=True)
         
-        # TITLE-002: ключевые слова в организации
+        # ключевые слова в организации
         if org_block and not has_org_keywords:
             result.add_rule(
                 "TITLE-002",
@@ -64,7 +49,7 @@ class TitlePageValidator(BaseValidator):
         # 2. Проверка метаданных УДК (обязательно)
         has_udk, udk_has_digits, has_nioktr = check_metadata(paragraphs, RE_HAS_DIGIT)
         
-        # TITLE-003: найден УДК
+        # найден УДК
         if not has_udk:
             result.add_rule(
                 "TITLE-003",
@@ -75,7 +60,7 @@ class TitlePageValidator(BaseValidator):
         else:
             result.add_rule("TITLE-003", "OK", implemented=True)
             
-            # TITLE-004: УДК содержит цифры
+            # УДК содержит цифры
             if not udk_has_digits:
                 result.add_rule(
                     "TITLE-004",
@@ -86,7 +71,7 @@ class TitlePageValidator(BaseValidator):
             else:
                 result.add_rule("TITLE-004", "OK", implemented=True)
 
-        # TITLE-005: регистрационный номер НИОКТР
+        # регистрационный номер НИОКТР
         if not has_nioktr:
             result.add_rule(
                 "TITLE-005",
@@ -100,7 +85,7 @@ class TitlePageValidator(BaseValidator):
         # 3. Проверка грифов (УТВЕРЖДАЮ обязательно, СОГЛАСОВАНО условно)
         utv, initials_found = check_approval_stamps(paragraphs)
         
-        # TITLE-006: гриф УТВЕРЖДАЮ
+        # гриф УТВЕРЖДАЮ
         if not utv:
             result.add_rule(
                 "TITLE-006",
@@ -111,7 +96,7 @@ class TitlePageValidator(BaseValidator):
         else:
             result.add_rule("TITLE-006", "OK", implemented=True)
             
-            # TITLE-007: инициалы после УТВЕРЖДАЮ
+            # инициалы после УТВЕРЖДАЮ
             if not initials_found:
                 result.add_rule(
                     "TITLE-007",
@@ -125,7 +110,7 @@ class TitlePageValidator(BaseValidator):
         # 4. Проверка вида документа (обязательно)
         doc_type, has_two_lines, is_uppercase = check_document_type(paragraphs)
         
-        # TITLE-008: вид документа найден
+        # вид документа найден
         if not doc_type:
             result.add_rule(
                 "TITLE-008",
@@ -136,7 +121,7 @@ class TitlePageValidator(BaseValidator):
         else:
             result.add_rule("TITLE-008", "OK", implemented=True)
             
-            # TITLE-009: две строки
+            # две строки
             if not has_two_lines:
                 result.add_rule(
                     "TITLE-009",
@@ -147,7 +132,7 @@ class TitlePageValidator(BaseValidator):
             else:
                 result.add_rule("TITLE-009", "OK", implemented=True)
 
-            # TITLE-010: заглавные буквы
+            # заглавные буквы
             if not is_uppercase:
                 result.add_rule(
                     "TITLE-010",
@@ -161,7 +146,7 @@ class TitlePageValidator(BaseValidator):
         # 5. Проверка места и года (обязательно)
         place, year, current_year, is_future_year = check_place_and_year(paragraphs)
         
-        # TITLE-011: год найден
+        # год найден
         if not year:
             result.add_rule(
                 "TITLE-011",
@@ -172,7 +157,7 @@ class TitlePageValidator(BaseValidator):
         else:
             result.add_rule("TITLE-011", "OK", implemented=True)
             
-            # TITLE-012: год не в будущем
+            # год не в будущем
             if is_future_year:
                 result.add_rule(
                     "TITLE-012",
@@ -183,7 +168,7 @@ class TitlePageValidator(BaseValidator):
             else:
                 result.add_rule("TITLE-012", "OK", implemented=True)
 
-            # TITLE-013: место указано
+            # место указано
             if not place:
                 result.add_rule(
                     "TITLE-013",

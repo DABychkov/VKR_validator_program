@@ -170,7 +170,7 @@ def extract_figure_caption_features(doc: Document) -> list[FigureCaptionFeature]
         if not text:
             continue
 
-        # Якорь приложения: после заголовка «ПРИЛОЖЕНИЕ …» (в т.ч. с хвостом строки).
+        # Якорь приложения: после заголовка «ПРИЛОЖЕНИЕ …» (также с хвостом строки).
         if (
             is_appendix_heading_paragraph(text)
             and (intro_paragraph_index is None or paragraph_index >= intro_paragraph_index)
